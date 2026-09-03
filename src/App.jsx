@@ -13,6 +13,8 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import AddBook from "./pages/AddBook";
+import EditBook from "./pages/EditBook";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -72,6 +74,20 @@ function App() {
             ) : (
               <Login onLogin={handleLogin} />
             )
+          }
+        />
+
+        <Route
+          path="/my-books/add"
+          element={
+            user ? <AddBook user={user} /> : <Login onLogin={handleLogin} />
+          }
+        />
+
+        <Route
+          path="/my-books/edit/:id"
+          element={
+            user ? <EditBook user={user} /> : <Login onLogin={handleLogin} />
           }
         />
 
