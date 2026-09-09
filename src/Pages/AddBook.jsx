@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import SearchAutocomplete from "../components/SearchAutoComplete";
+import SearchAutocomplete from "../Components/SearchAutoComplete";
 import "./AddBook.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
