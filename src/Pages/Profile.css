@@ -1,0 +1,163 @@
+.profile-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-page h1 {
+    font-size: 28px;
+}
+
+.profile-page .subtitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+}
+
+.profile-sidebar {
+    text-align: center;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.10);
+}
+
+.profile-sidebar .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #2E7D32;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0 auto 15px;
+}
+
+.profile-sidebar .name {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.profile-sidebar .username {
+    color: #666;
+    font-size: 14px;
+}
+
+.profile-sidebar .location {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.profile-sidebar .member-since {
+    color: #999;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.profile-sidebar .bio {
+    margin-top: 15px;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.profile-sidebar .role-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 16px;
+    background: #fff3e0;
+    color: #f57c00;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.profile-form {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.10);
+}
+
+.profile-form .form-group {
+    margin-bottom: 15px;
+}
+
+.profile-form .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.profile-form .form-group input,
+.profile-form .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.profile-form .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.profile-form .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.profile-form .form-actions .btn-save {
+    padding: 10px 24px;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-form .form-actions .btn-save:hover {
+    background: #1e5a20;
+}
+
+.profile-form .form-actions .btn-cancel {
+    padding: 10px 24px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-form .form-actions .btn-cancel:hover {
+    background: #ddd;
+}
+
+.profile-form .success {
+    background: #e8f5e9;
+    color: #2E7D32;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.profile-form .error {
+    background: #fde8e8;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}

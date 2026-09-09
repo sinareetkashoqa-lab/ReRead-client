@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import "./AdminDashboard.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminDashboard = ({ user }) => {
   const [stats, setStats] = useState({
@@ -17,7 +20,6 @@ const AdminDashboard = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    // Filter users based on search term
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
       const filtered = users.filter(
@@ -36,15 +38,13 @@ const AdminDashboard = ({ user }) => {
     try {
       setLoading(true);
 
-      //Fetch stats
-      const statsRes = await fetch("http://localhost:5000/api/admin/stats", {
+      const statsRes = await fetch(`${API_BASE_URL}/api/admin/stats`, {
         headers: { "x-role": user.role },
       });
       const statsData = await statsRes.json();
       setStats(statsData);
 
-      //Fetch all users
-      const usersRes = await fetch("http://localhost:5000/api/admin/users", {
+      const usersRes = await fetch(`${API_BASE_URL}/api/admin/users`, {
         headers: { "x-role": user.role },
       });
       const usersData = await usersRes.json();
@@ -62,7 +62,7 @@ const AdminDashboard = ({ user }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/users/${userId}/suspend`,
+        `${API_BASE_URL}/api/admin/users/${userId}/suspend`,
         {
           method: "PUT",
           headers: { "x-role": user.role },
@@ -86,13 +86,10 @@ const AdminDashboard = ({ user }) => {
       return;
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/admin/users/${userId}`,
-        {
-          method: "DELETE",
-          headers: { "x-role": user.role },
-        },
-      );
+      const res = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: { "x-role": user.role },
+      });
 
       if (res.ok) {
         alert("User deleted");
@@ -111,36 +108,33 @@ const AdminDashboard = ({ user }) => {
   }
 
   return (
-    <div>
+    <div className="admin-page">
       <h1>Admin Dashboard</h1>
-      <p>Welcome, {user?.full_name || user?.username}!</p>
+      <p className="subtitle">Welcome, Admin!</p>
 
-      {/*Stats Cards*/}
-      <div>
-        <div>
-          <h3>{stats.totalUsers}</h3>
-          <p>Total Users</p>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <h3 className="number green">{stats.totalUsers}</h3>
+          <p className="label">Total Users</p>
         </div>
-        <div>
-          <h3>{stats.totalBooks}</h3>
-          <p>Total Books</p>
+        <div className="stat-card">
+          <h3 className="number blue">{stats.totalBooks}</h3>
+          <p className="label">Total Books</p>
         </div>
-        <div>
-          <h3>{stats.totalRequests}</h3>
-          <p>Total Requests</p>
+        <div className="stat-card">
+          <h3 className="number orange">{stats.totalRequests}</h3>
+          <p className="label">Total Requests</p>
         </div>
-        <div>
-          <h3>{stats.activeBorrows}</h3>
-          <p>Active Borrows</p>
+        <div className="stat-card">
+          <h3 className="number purple">{stats.activeBorrows}</h3>
+          <p className="label">Active Borrows</p>
         </div>
       </div>
 
-      {/*Users Table*/}
-      <div>
+      <div className="admin-section">
         <h2>Manage Users</h2>
 
-        {/*Search Bar*/}
-        <div>
+        <div className="search-bar">
           <input
             type="text"
             placeholder="Search users by name or email..."
@@ -148,16 +142,18 @@ const AdminDashboard = ({ user }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           {searchTerm && (
-            <button onClick={() => setSearchTerm("")}>Clear</button>
+            <button className="btn-clear" onClick={() => setSearchTerm("")}>
+              Clear
+            </button>
           )}
         </div>
 
         <p>Showing {filteredUsers.length} users</p>
 
         {filteredUsers.length === 0 ? (
-          <p>No users found</p>
+          <p className="empty-state">No users found</p>
         ) : (
-          <table>
+          <table className="admin-table">
             <thead>
               <tr>
                 <th>ID</th>
@@ -176,20 +172,37 @@ const AdminDashboard = ({ user }) => {
                   <td>{u.username}</td>
                   <td>{u.full_name || "N/A"}</td>
                   <td>{u.email}</td>
-                  <td>{u.role}</td>
-                  <td>{u.is_suspended ? "Suspended" : "Active"}</td>
                   <td>
-                    {u.role !== "admin" && (
+                    <span className={`role-badge ${u.role}`}>{u.role}</span>
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        u.is_suspended ? "status-suspended" : "status-active"
+                      }
+                    >
+                      {u.is_suspended ? "Suspended" : "Active"}
+                    </span>
+                  </td>
+                  <td>
+                    {u.role !== "admin" ? (
                       <>
-                        <button onClick={() => handleSuspendUser(u.id)}>
+                        <button
+                          className="btn-suspend"
+                          onClick={() => handleSuspendUser(u.id)}
+                        >
                           {u.is_suspended ? "Unsuspend" : "Suspend"}
                         </button>
-                        <button onClick={() => handleDeleteUser(u.id)}>
+                        <button
+                          className="btn-delete"
+                          onClick={() => handleDeleteUser(u.id)}
+                        >
                           Delete
                         </button>
                       </>
+                    ) : (
+                      <span className="no-edit">Cannot modify admin</span>
                     )}
-                    {u.role === "admin" && <span>Cannot modify admin</span>}
                   </td>
                 </tr>
               ))}

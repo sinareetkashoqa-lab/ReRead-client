@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "./Dashboard.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Dashboard = ({ user }) => {
   const [stats, setStats] = useState({
@@ -19,16 +22,14 @@ const Dashboard = ({ user }) => {
     try {
       setLoading(true);
 
-      //Fetch stats
-      const statsRes = await fetch("http://localhost:5000/api/users/stats", {
-        headers: { "x-role": user.role },
+      const statsRes = await fetch(`${API_BASE_URL}/api/users/stats`, {
+        headers: { "x-role": user.role, "user-id": user.id },
       });
       const statsData = await statsRes.json();
       setStats(statsData);
 
-      //Fetch user's books
-      const booksRes = await fetch("http://localhost:5000/api/books/my-books", {
-        headers: { "x-role": user.role },
+      const booksRes = await fetch(`${API_BASE_URL}/api/books/my-books`, {
+        headers: { "x-role": user.role, "user-id": user.id },
       });
       const booksData = await booksRes.json();
       setMyBooks(booksData);
@@ -43,9 +44,9 @@ const Dashboard = ({ user }) => {
     if (!confirm("Are you sure you want to delete this book?")) return;
 
     try {
-      await fetch(`http://localhost:5000/api/books/${id}`, {
+      await fetch(`${API_BASE_URL}/api/books/${id}`, {
         method: "DELETE",
-        headers: { "x-role": user.role },
+        headers: { "x-role": user.role, "user-id": user.id },
       });
       setMyBooks(myBooks.filter((book) => book.id !== id));
     } catch (error) {
@@ -58,49 +59,48 @@ const Dashboard = ({ user }) => {
   }
 
   return (
-    <div>
+    <div className="dashboard">
       <h1>Dashboard</h1>
-      <p>Welcome, {user?.full_name || user?.username}!</p>
+      <p className="subtitle">Welcome, {user?.full_name || user?.username}!</p>
 
-      {/*Stats Cards*/}
-      <div>
-        <div>
-          <h3>{stats.booksOwned}</h3>
-          <p>Books Owned</p>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <h3 className="number green">{stats.booksOwned}</h3>
+          <p className="label">Books Owned</p>
         </div>
-        <div>
-          <h3>{stats.booksBorrowed}</h3>
-          <p>Books Borrowed</p>
+        <div className="stat-card">
+          <h3 className="number blue">{stats.booksBorrowed}</h3>
+          <p className="label">Books Borrowed</p>
         </div>
-        <div>
-          <h3>{stats.pendingRequests}</h3>
-          <p>Pending Requests</p>
+        <div className="stat-card">
+          <h3 className="number orange">{stats.pendingRequests}</h3>
+          <p className="label">Pending Requests</p>
         </div>
-        <div>
-          <h3>{stats.reviewsWritten}</h3>
-          <p>Reviews Written</p>
+        <div className="stat-card">
+          <h3 className="number purple">{stats.reviewsWritten}</h3>
+          <p className="label">Reviews Written</p>
         </div>
       </div>
 
-      {/*Browse*/}
       <Link to="/browse">
-        <div>
+        <div className="browse-banner">
           <h2>Browse Community Books</h2>
           <p>Discover books from your neighbors</p>
         </div>
       </Link>
 
-      {/*My Books*/}
-      <div>
-        <h2>My Books</h2>
-        <Link to="/my-books/add">
-          <button>Add New Book</button>
-        </Link>
+      <div className="my-books-section">
+        <div className="my-books-header">
+          <h2>My Books</h2>
+          <Link to="/my-books/add">
+            <button className="btn-add">Add New Book</button>
+          </Link>
+        </div>
 
         {myBooks.length === 0 ? (
-          <p>You haven't added any books yet.</p>
+          <p className="empty-state">You haven't added any books yet.</p>
         ) : (
-          <table>
+          <table className="book-table">
             <thead>
               <tr>
                 <th>Title</th>
@@ -112,16 +112,31 @@ const Dashboard = ({ user }) => {
             <tbody>
               {myBooks.map((book) => (
                 <tr key={book.id}>
-                  <td>
+                  <td className="book-title">
                     <Link to={`/books/${book.id}`}>{book.title}</Link>
                   </td>
                   <td>{book.author}</td>
-                  <td>{book.is_available ? "Available" : "Borrowed"}</td>
+                  <td>
+                    <span
+                      className={
+                        book.is_available
+                          ? "status-available"
+                          : "status-borrowed"
+                      }
+                    >
+                      {book.is_available ? "Available" : "Borrowed"}
+                    </span>
+                  </td>
                   <td>
                     <Link to={`/my-books/edit/${book.id}`}>
-                      <button>Edit</button>
+                      <button className="btn-edit">Edit</button>
                     </Link>
-                    <button onClick={() => deleteBook(book.id)}>Delete</button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => deleteBook(book.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

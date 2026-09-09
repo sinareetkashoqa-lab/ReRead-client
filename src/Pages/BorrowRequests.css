@@ -1,0 +1,211 @@
+.requests-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.requests-page h1 {
+    font-size: 28px;
+}
+
+.requests-page .subtitle {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.tabs {
+    display: flex;
+    gap: 5px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+}
+
+.tabs .tab {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    color: #666;
+    border-bottom: 3px solid transparent;
+}
+
+.tabs .tab.active {
+    color: #2E7D32;
+    border-bottom-color: #2E7D32;
+}
+
+.tabs .tab:hover {
+    color: #2E7D32;
+}
+
+.tabs .tab .count {
+    background: #f0f0f0;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.tabs .tab.active .count {
+    background: #e8f5e9;
+    color: #2E7D32;
+}
+
+.requests-search {
+    margin-bottom: 20px;
+}
+
+.requests-search input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+    font-size: 14px;
+}
+
+.request-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.10);
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.request-card .book-info {
+    flex: 1;
+}
+
+.request-card .book-info .book-title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.request-card .book-info .book-title a {
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+.request-card .book-info .book-title a:hover {
+    color: #2E7D32;
+    text-decoration: underline;
+}
+
+.request-card .book-info .book-author {
+    color: #666;
+    font-size: 14px;
+}
+
+.request-card .book-info .request-details {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.request-card .book-info .request-message {
+    background: #f5f7f5;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-top: 8px;
+    font-style: italic;
+    color: #444;
+}
+
+.request-card .book-info .request-status {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.request-card .book-info .request-status.pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.request-card .book-info .request-status.approved {
+    background: #e8f5e9;
+    color: #2E7D32;
+}
+
+.request-card .book-info .request-status.declined {
+    background: #fce4ec;
+    color: #c62828;
+}
+
+.request-card .book-info .request-status.returned {
+    background: #e3f2fd;
+    color: #1976D2;
+}
+
+.request-card .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.request-card .actions .btn-approve {
+    padding: 6px 16px;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.request-card .actions .btn-approve:hover {
+    background: #1e5a20;
+}
+
+.request-card .actions .btn-decline {
+    padding: 6px 16px;
+    background: #c62828;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.request-card .actions .btn-decline:hover {
+    background: #8e1a1a;
+}
+
+.request-card .actions .btn-cancel {
+    padding: 6px 16px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.request-card .actions .btn-cancel:hover {
+    background: #ddd;
+}
+
+.request-card .actions .btn-return {
+    padding: 6px 16px;
+    background: #1976D2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.request-card .actions .btn-return:hover {
+    background: #0d47a1;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}

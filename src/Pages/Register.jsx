@@ -1,159 +1,82 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import "./Settings.css";
 
-const Register = ({ onLogin }) => {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    fullName: "",
-    location: "",
-  });
-  const [error, setError] = useState("");
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const Settings = ({ user }) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleDeleteAccount = async () => {
     setLoading(true);
     setError("");
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          fullName: formData.fullName,
-          location: formData.location,
-        }),
+      const res = await fetch(`${API_BASE_URL}/api/users/profile`, {
+        method: "DELETE",
+        headers: { "x-role": user.role, "user-id": user.id },
       });
 
-      const data = await res.json();
-
       if (res.ok) {
-        onLogin(data.user);
-        window.location.href = "/dashboard";
+        localStorage.removeItem("user");
+        alert("Account deleted successfully");
+        window.location.href = "/";
       } else {
-        setError(data.message || "Registration failed");
+        const data = await res.json();
+        setError(data.message || "Failed to delete account");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Error deleting account:", error);
       setError("Server error. Please try again.");
     } finally {
       setLoading(false);
+      setShowConfirm(false);
     }
   };
 
   return (
-    <div>
-      <h2>Join ReRead</h2>
-      <p>Create your account and start sharing books</p>
+    <div className="settings-page">
+      <h1>Settings</h1>
+      <p className="subtitle">Manage your account settings</p>
 
-      {error && <div>{error}</div>}
+      {error && <div className="error">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Full Name</label>
-          <input
-            type="text"
-            name="fullName"
-            placeholder="Sarah Ahmed"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <div className="settings-card">
+        <h2>Account Management</h2>
+        <p className="warning">
+          Once you delete your account, there is no going back. Please be
+          certain.
+        </p>
 
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            placeholder="sarah_reader"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-          <small>Must be at least 3 characters</small>
-        </div>
-
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="sarah@email.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <small>Must be at least 8 characters with a number</small>
-        </div>
-
-        <div>
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="••••••••"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Location</label>
-          <input
-            type="text"
-            name="location"
-            placeholder="Amman, Jordan"
-            value={formData.location}
-            onChange={handleChange}
-          />
-          <small>This helps you find books near you</small>
-        </div>
-
-        <div>
-          <label>
-            <input type="checkbox" required /> I agree to the Terms of Service
-          </label>
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating Account..." : "Create Account"}
-        </button>
-      </form>
-
-      <div>
-        Already have an account? <Link to="/login">Login</Link>
+        {!showConfirm ? (
+          <button className="btn-delete" onClick={() => setShowConfirm(true)}>
+            Delete Account
+          </button>
+        ) : (
+          <div className="confirm-box">
+            <p>
+              Are you sure you want to delete your account? This action cannot
+              be undone.
+            </p>
+            <button
+              className="btn-confirm"
+              onClick={handleDeleteAccount}
+              disabled={loading}
+            >
+              {loading ? "Deleting..." : "Yes, Delete My Account"}
+            </button>
+            <button
+              className="btn-cancel"
+              onClick={() => setShowConfirm(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Register;
+export default Settings;

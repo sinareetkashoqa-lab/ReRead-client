@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import "./Navbar.css";
 
 const Navbar = ({ user, onLogout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-success">
-      <div className="container">
+      <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           ReRead
         </Link>
@@ -17,29 +18,48 @@ const Navbar = ({ user, onLogout }) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/browse">
-                Browse Books
-              </Link>
-            </li>
-
             {user ? (
               <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/dashboard">
-                    Dashboard
-                  </Link>
-                </li>
-                {user.role === "admin" && (
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/admin">
-                      Admin
-                    </Link>
-                  </li>
+                {user.role === "admin" ? (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/admin">
+                        Admin
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/admin/books">
+                        Manage Books
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/admin/requests">
+                        Manage Requests
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/browse">
+                        Browse Books
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/dashboard">
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/borrow-requests">
+                        Borrow Requests
+                      </Link>
+                    </li>
+                  </>
                 )}
                 <li className="nav-item">
                   <Link className="nav-link" to="/profile">
-                    {user.username}
+                    Profile
                   </Link>
                 </li>
                 <li className="nav-item">

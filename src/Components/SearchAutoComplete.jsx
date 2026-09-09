@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const SearchAutocomplete = ({ onSelect, placeholder }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -34,7 +36,7 @@ const SearchAutocomplete = ({ onSelect, placeholder }) => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5000/api/books/fetch-search?q=${encodeURIComponent(searchQuery)}`,
+        `${API_BASE_URL}/api/books/search?q=${encodeURIComponent(searchQuery)}`,
       );
       const data = await res.json();
       setSuggestions(data);
@@ -53,8 +55,9 @@ const SearchAutocomplete = ({ onSelect, placeholder }) => {
   };
 
   return (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} className="search-section">
       <input
+        className="search-input"
         type="text"
         placeholder={placeholder || "Search for a book..."}
         value={query}
@@ -63,31 +66,32 @@ const SearchAutocomplete = ({ onSelect, placeholder }) => {
           if (suggestions.length > 0) setShowSuggestions(true);
         }}
       />
-      {loading && <div>Loading...</div>}
+      {loading && <div className="loading">Loading...</div>}
       {showSuggestions && suggestions.length > 0 && (
-        <div>
+        <div className="suggestions">
           {suggestions.map((book, index) => (
-            <div key={index} onClick={() => handleSelect(book)}>
-              <div>
-                <img
-                  src={
-                    book.coverImage ||
-                    "https://via.placeholder.com/40x60?text=No+Cover"
-                  }
-                  alt={book.title}
-                  style={{ width: "40px", height: "60px", objectFit: "cover" }}
-                />
-                <div>
-                  <strong>{book.title}</strong>
-                  <p>by {book.author}</p>
-                </div>
+            <div
+              key={index}
+              className="suggestion-item"
+              onClick={() => handleSelect(book)}
+            >
+              <img
+                src={
+                  book.coverImage ||
+                  "https://via.placeholder.com/40x60?text=No+Cover"
+                }
+                alt={book.title}
+              />
+              <div className="info">
+                <div className="title">{book.title}</div>
+                <div className="author">by {book.author}</div>
               </div>
             </div>
           ))}
         </div>
       )}
       {showSuggestions && suggestions.length === 0 && query.length >= 2 && (
-        <div>
+        <div className="suggestions">
           <p>No books found.</p>
         </div>
       )}

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import "./BorrowRequests.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BorrowRequests = ({ user }) => {
   const [sentRequests, setSentRequests] = useState([]);
@@ -16,24 +18,21 @@ const BorrowRequests = ({ user }) => {
     try {
       setLoading(true);
 
-      //Fetch sent requests (user as requester)
-      const sentRes = await fetch("http://localhost:5000/api/borrow-requests", {
-        headers: { "x-role": user.role },
+      const sentRes = await fetch(`${API_BASE_URL}/api/borrow-requests`, {
+        headers: { "x-role": user.role, "user-id": user.id },
       });
       const sentData = await sentRes.json();
       setSentRequests(sentData.filter((r) => r.status !== "returned"));
 
-      //Fetch received requests (user as owner)
       const receivedRes = await fetch(
-        "http://localhost:5000/api/borrow-requests/received",
+        `${API_BASE_URL}/api/borrow-requests/received`,
         {
-          headers: { "x-role": user.role },
+          headers: { "x-role": user.role, "user-id": user.id },
         },
       );
       const receivedData = await receivedRes.json();
       setReceivedRequests(receivedData.filter((r) => r.status !== "returned"));
 
-      //Fetch all requests
       const allSent = sentData.filter((r) => r.status === "returned");
       const allReceived = receivedData.filter((r) => r.status === "returned");
       setCompletedRequests([...allSent, ...allReceived]);
@@ -49,10 +48,10 @@ const BorrowRequests = ({ user }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/borrow-requests/${requestId}/approve`,
+        `${API_BASE_URL}/api/borrow-requests/${requestId}/approve`,
         {
           method: "PUT",
-          headers: { "x-role": user.role },
+          headers: { "x-role": user.role, "user-id": user.id },
         },
       );
 
@@ -73,10 +72,10 @@ const BorrowRequests = ({ user }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/borrow-requests/${requestId}/decline`,
+        `${API_BASE_URL}/api/borrow-requests/${requestId}/decline`,
         {
           method: "PUT",
-          headers: { "x-role": user.role },
+          headers: { "x-role": user.role, "user-id": user.id },
         },
       );
 
@@ -97,10 +96,10 @@ const BorrowRequests = ({ user }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/borrow-requests/${requestId}/return`,
+        `${API_BASE_URL}/api/borrow-requests/${requestId}/return`,
         {
           method: "PUT",
-          headers: { "x-role": user.role },
+          headers: { "x-role": user.role, "user-id": user.id },
         },
       );
 
@@ -121,10 +120,10 @@ const BorrowRequests = ({ user }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/borrow-requests/${requestId}`,
+        `${API_BASE_URL}/api/borrow-requests/${requestId}`,
         {
           method: "DELETE",
-          headers: { "x-role": user.role },
+          headers: { "x-role": user.role, "user-id": user.id },
         },
       );
 
@@ -145,29 +144,36 @@ const BorrowRequests = ({ user }) => {
   }
 
   return (
-    <div>
+    <div className="requests-page">
       <h1>Borrow Requests</h1>
-      <p>Manage your borrow requests</p>
+      <p className="subtitle">Manage your borrow requests</p>
 
-      {/* Tabs */}
-      <div>
-        <button onClick={() => setActiveTab("sent")}>
-          Sent ({sentRequests.length})
+      <div className="tabs">
+        <button
+          className={`tab ${activeTab === "sent" ? "active" : ""}`}
+          onClick={() => setActiveTab("sent")}
+        >
+          Sent <span className="count">{sentRequests.length}</span>
         </button>
-        <button onClick={() => setActiveTab("received")}>
-          Received ({receivedRequests.length})
+        <button
+          className={`tab ${activeTab === "received" ? "active" : ""}`}
+          onClick={() => setActiveTab("received")}
+        >
+          Received <span className="count">{receivedRequests.length}</span>
         </button>
-        <button onClick={() => setActiveTab("completed")}>
-          Completed ({completedRequests.length})
+        <button
+          className={`tab ${activeTab === "completed" ? "active" : ""}`}
+          onClick={() => setActiveTab("completed")}
+        >
+          Completed <span className="count">{completedRequests.length}</span>
         </button>
       </div>
 
-      {/*Sent Requests*/}
       {activeTab === "sent" && (
         <div>
           <h2>Requests You've Sent</h2>
           {sentRequests.length === 0 ? (
-            <p>
+            <p className="empty-state">
               No sent requests. Browse books and click a book to request it.
             </p>
           ) : (
@@ -185,12 +191,11 @@ const BorrowRequests = ({ user }) => {
         </div>
       )}
 
-      {/*Received Requests*/}
       {activeTab === "received" && (
         <div>
           <h2>Requests Received</h2>
           {receivedRequests.length === 0 ? (
-            <p>No received requests.</p>
+            <p className="empty-state">No received requests.</p>
           ) : (
             <div>
               {receivedRequests.map((request) => (
@@ -208,12 +213,11 @@ const BorrowRequests = ({ user }) => {
         </div>
       )}
 
-      {/*Completed Requests*/}
       {activeTab === "completed" && (
         <div>
           <h2>Completed Requests</h2>
           {completedRequests.length === 0 ? (
-            <p>No completed requests yet.</p>
+            <p className="empty-state">No completed requests yet.</p>
           ) : (
             <div>
               {completedRequests.map((request) => (
@@ -231,7 +235,6 @@ const BorrowRequests = ({ user }) => {
   );
 };
 
-// Request Card Component
 const RequestCard = ({
   request,
   type,
@@ -240,10 +243,6 @@ const RequestCard = ({
   onReturn,
   onCancel,
 }) => {
-  const book = request.book || {};
-  const requester = request.requester || {};
-  const owner = request.owner || {};
-
   const getStatusBadge = () => {
     switch (request.status) {
       case "pending":
@@ -259,84 +258,82 @@ const RequestCard = ({
     }
   };
 
+  const counterpartLabel =
+    type === "sent"
+      ? "Owner"
+      : type === "received"
+        ? "Requester"
+        : request.owner_name
+          ? "Owner"
+          : "Requester";
+  const counterpartName =
+    request.owner_name || request.requester_username || "Unknown";
+
   return (
-    <div>
-      <div>
-        <Link to={`/books/${book.id}`}>
-          <strong>{book.title}</strong>
-        </Link>
-        <p>by {book.author}</p>
-      </div>
+    <>
+      <div className="request-card">
+        <div className="book-info">
+          <div className="book-title">
+            <strong>{request.book_title}</strong>
+          </div>
+          <p className="book-author">by {request.book_author}</p>
 
-      <div>
-        {type === "sent" && (
-          <>
-            <p>
-              <strong>Owner:</strong> {owner.username || "Unknown"}
+          <p className="request-details">
+            <strong>{counterpartLabel}:</strong> {counterpartName}
+          </p>
+
+          <span className={`request-status ${request.status}`}>
+            {getStatusBadge()}
+          </span>
+
+          {request.message && (
+            <p className="request-message">
+              <strong>{type === "sent" ? "Your message:" : "Message:"}</strong>{" "}
+              {request.message}
             </p>
-            <p>
-              <strong>Status:</strong> {getStatusBadge()}
+          )}
+
+          {type === "completed" && request.return_date && (
+            <p className="request-details">
+              <strong>Returned:</strong>{" "}
+              {new Date(request.return_date).toLocaleDateString()}
             </p>
-            {request.message && (
-              <p>
-                <strong>Your message:</strong> {request.message}
-              </p>
-            )}
-            {request.status === "pending" && (
-              <button onClick={() => onCancel(request.id)}>
-                Cancel Request
+          )}
+        </div>
+
+        <div className="actions">
+          {type === "sent" && request.status === "pending" && (
+            <button className="btn-cancel" onClick={() => onCancel(request.id)}>
+              Cancel Request
+            </button>
+          )}
+
+          {type === "received" && request.status === "pending" && (
+            <>
+              <button
+                className="btn-approve"
+                onClick={() => onApprove(request.id)}
+              >
+                Approve
               </button>
-            )}
-          </>
-        )}
-
-        {type === "received" && (
-          <>
-            <p>
-              <strong>Requester:</strong> {requester.username || "Unknown"}
-            </p>
-            <p>
-              <strong>Status:</strong> {getStatusBadge()}
-            </p>
-            {request.message && (
-              <p>
-                <strong>Message:</strong> {request.message}
-              </p>
-            )}
-            {request.status === "pending" && (
-              <div>
-                <button onClick={() => onApprove(request.id)}>Approve</button>
-                <button onClick={() => onDecline(request.id)}>Decline</button>
-              </div>
-            )}
-            {request.status === "approved" && (
-              <button onClick={() => onReturn(request.id)}>
-                Mark as Returned
+              <button
+                className="btn-decline"
+                onClick={() => onDecline(request.id)}
+              >
+                Decline
               </button>
-            )}
-          </>
-        )}
+            </>
+          )}
 
-        {type === "completed" && (
-          <>
-            <p>
-              <strong>Status:</strong> {getStatusBadge()}
-            </p>
-            {request.return_date && (
-              <p>
-                <strong>Returned:</strong>{" "}
-                {new Date(request.return_date).toLocaleDateString()}
-              </p>
-            )}
-          </>
-        )}
-
-        <Link to={`/books/${book.id}`}>
-          <button>View Book</button>
-        </Link>
+          {type === "received" && request.status === "approved" && (
+            <button className="btn-return" onClick={() => onReturn(request.id)}>
+              Mark as Returned
+            </button>
+          )}
+        </div>
       </div>
       <hr />
-    </div>
+    </>
   );
 };
 

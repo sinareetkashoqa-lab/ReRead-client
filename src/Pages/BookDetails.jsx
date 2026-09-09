@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import "./BookDetails.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BookDetails = ({ user }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [requestLoading, setRequestLoading] = useState(false);
+  const [hasPendingRequest, setHasPendingRequest] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [showReviewForm, setShowReviewForm] = useState(false);
 
@@ -19,17 +22,24 @@ const BookDetails = ({ user }) => {
     try {
       setLoading(true);
 
-      //Fetch book details
-      const bookRes = await fetch(`http://localhost:5000/api/books/${id}`);
+      const bookRes = await fetch(`${API_BASE_URL}/api/books/${id}`);
       const bookData = await bookRes.json();
       setBook(bookData);
 
-      //Fetch reviews for this book
-      const reviewsRes = await fetch(
-        `http://localhost:5000/api/reviews/book/${id}`,
-      );
+      const reviewsRes = await fetch(`${API_BASE_URL}/api/reviews/book/${id}`);
       const reviewsData = await reviewsRes.json();
       setReviews(reviewsData);
+
+      if (bookData.user_id !== user.id) {
+        const requestsRes = await fetch(`${API_BASE_URL}/api/borrow-requests`, {
+          headers: { "x-role": user.role, "user-id": user.id },
+        });
+        const requestsData = await requestsRes.json();
+        const pending = requestsData.some(
+          (r) => r.book_id === bookData.id && r.status === "pending",
+        );
+        setHasPendingRequest(pending);
+      }
     } catch (error) {
       console.error("Error fetching book details:", error);
     } finally {
@@ -38,19 +48,15 @@ const BookDetails = ({ user }) => {
   };
 
   const handleRequestBorrow = async () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
     setRequestLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/borrow-requests", {
+      const res = await fetch(`${API_BASE_URL}/api/borrow-requests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-role": user.role,
+          "user-id": user.id,
         },
         body: JSON.stringify({
           book_id: book.id,
@@ -61,7 +67,6 @@ const BookDetails = ({ user }) => {
 
       if (res.ok) {
         alert("Request sent successfully!");
-        //Refresh book details to update availability
         fetchBookDetails();
       } else {
         alert(data.message || "Failed to send request");
@@ -79,11 +84,12 @@ const BookDetails = ({ user }) => {
     if (!reviewText.trim()) return;
 
     try {
-      const res = await fetch("http://localhost:5000/api/reviews", {
+      const res = await fetch(`${API_BASE_URL}/api/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-role": user.role,
+          "user-id": user.id,
         },
         body: JSON.stringify({
           book_id: book.id,
@@ -94,9 +100,8 @@ const BookDetails = ({ user }) => {
       if (res.ok) {
         setReviewText("");
         setShowReviewForm(false);
-        //Refresh reviews
         const reviewsRes = await fetch(
-          `http://localhost:5000/api/reviews/book/${id}`,
+          `${API_BASE_URL}/api/reviews/book/${id}`,
         );
         const reviewsData = await reviewsRes.json();
         setReviews(reviewsData);
@@ -117,111 +122,135 @@ const BookDetails = ({ user }) => {
     return <div>Book not found</div>;
   }
 
+  const isOwner = book.user_id === user.id;
+
   const coverImage =
     book.cover_image_url || "https://via.placeholder.com/300x400?text=No+Cover";
 
   return (
-    <div>
-      <Link to="/browse">← Back to Browse</Link>
+    <div className="book-details">
+      <p className="breadcrumb">
+        <Link to="/browse">← Back to Browse</Link>
+      </p>
 
-      <div>
-        {/*Book Cover*/}
-        <div>
+      <div className="book-layout">
+        <div className="cover">
           <img src={coverImage} alt={book.title} />
         </div>
 
-        {/*Book Info*/}
-        <div>
+        <div className="info">
+          <span className="genre-badge">{book.genre}</span>
           <h1>{book.title}</h1>
-          <h3>by {book.author}</h3>
-          <p>
-            <strong>Genre:</strong> {book.genre}
-          </p>
-          <p>
-            <strong>ISBN:</strong> {book.isbn || "N/A"}
-          </p>
-          <p>
-            <strong>Condition:</strong> {book.condition || "Not specified"}
-          </p>
-          <p>
-            <strong>Status:</strong>{" "}
+          <h3 className="author">by {book.author}</h3>
+          <div className="metadata">
+            <p>
+              <strong>ISBN:</strong> {book.isbn || "N/A"}
+            </p>
+          </div>
+          <span className="condition">{book.condition || "Not specified"}</span>
+          <span
+            className={`availability ${book.is_available ? "available" : "borrowed"}`}
+          >
             {book.is_available ? "Available" : "Borrowed"}
-          </p>
-          <p>
-            <strong>Description:</strong>
-          </p>
-          <p>{book.description || "No description available"}</p>
+          </span>
 
-          {/*Owner Info*/}
-          <div>
+          <p className="description">
+            {book.description || "No description available"}
+          </p>
+
+          <div className="owner">
             <h4>Owner</h4>
             <p>
               <strong>Name:</strong> {book.owner_name || "Unknown"}
             </p>
-            <p>
+            <p className="location">
               <strong>Location:</strong> {book.location || "Unknown"}
             </p>
-            {book.owner_notes && (
-              <p>
-                <strong>Owner's Notes:</strong> {book.owner_notes}
-              </p>
-            )}
           </div>
-
-          {/*Request Button*/}
-          {book.is_available ? (
-            <button onClick={handleRequestBorrow} disabled={requestLoading}>
-              {requestLoading ? "Sending..." : "Request to Borrow"}
-            </button>
-          ) : (
-            <p>This book is currently borrowed</p>
+          {book.owner_notes && (
+            <div className="owner-notes">
+              <strong>Owner's Notes:</strong>
+              <p>{book.owner_notes}</p>
+            </div>
           )}
+
+          {!isOwner &&
+            (book.is_available ? (
+              hasPendingRequest ? (
+                <button className="btn-request" disabled>
+                  Request Pending
+                </button>
+              ) : (
+                <button
+                  className="btn-request"
+                  onClick={handleRequestBorrow}
+                  disabled={requestLoading}
+                >
+                  {requestLoading ? "Sending..." : "Request to Borrow"}
+                </button>
+              )
+            ) : (
+              <p>This book is currently borrowed</p>
+            ))}
         </div>
       </div>
 
-      {/*Reviews Section*/}
-      <div>
+      <div className="reviews-section">
         <h3>Reviews</h3>
 
         {reviews.length === 0 ? (
-          <p>No reviews yet. Be the first to leave a review!</p>
+          <p className="no-reviews">
+            {isOwner
+              ? "No reviews yet."
+              : "No reviews yet. Be the first to leave a review!"}
+          </p>
         ) : (
           <div>
             {reviews.map((review) => (
-              <div key={review.id}>
-                <p>
-                  <strong>{review.reviewer_name || "Anonymous"}</strong>
+              <div className="review-card" key={review.id}>
+                <p className="reviewer">
+                  {review.reviewer_name || "Anonymous"}
                 </p>
-                <p>{review.comment}</p>
-                <p>
+                <p className="review-date">
                   {review.created_at
                     ? new Date(review.created_at).toLocaleDateString()
                     : ""}
                 </p>
-                <hr />
+                <p className="review-comment">{review.comment}</p>
               </div>
             ))}
           </div>
         )}
 
-        {user && (
+        {!isOwner && (
           <>
             {!showReviewForm ? (
-              <button onClick={() => setShowReviewForm(true)}>
+              <button
+                className="btn-write-review"
+                onClick={() => setShowReviewForm(true)}
+              >
                 Write a Review
               </button>
             ) : (
-              <form onSubmit={handleAddReview}>
+              <form className="review-form" onSubmit={handleAddReview}>
                 <textarea
                   placeholder="Share your thoughts about this book..."
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
                   rows="4"
                 />
-                <button type="submit">Submit Review</button>
-                <button type="button" onClick={() => setShowReviewForm(false)}>
-                  Cancel
-                </button>
+                <div>
+                  <button className="btn-submit" type="submit">
+                    Submit Review
+                  </button>
+                  <button
+                    className="btn-cancel"
+                    type="button"
+                    onClick={() => setShowReviewForm(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </form>
             )}
           </>
