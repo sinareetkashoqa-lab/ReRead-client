@@ -1,0 +1,116 @@
+.edit-book-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.edit-book-page h1 {
+    font-size: 28px;
+}
+
+.edit-book-page .subtitle {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.edit-book-page.success-screen {
+    text-align: center;
+    padding-top: 60px;
+}
+
+.edit-book-page .book-info {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.edit-book-page .book-info strong {
+    color: #1a1a1a;
+}
+
+.edit-book-form {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.10);
+}
+
+.edit-book-form .form-group {
+    margin-bottom: 20px;
+}
+
+.edit-book-form .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.edit-book-form .form-group select,
+.edit-book-form .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.edit-book-form .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.edit-book-form .form-group .hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 3px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.success-screen .form-actions {
+    justify-content: center;
+}
+
+.form-actions .btn-update {
+    padding: 10px 24px;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-actions .btn-update:hover {
+    background: #1e5a20;
+}
+
+.form-actions .btn-update:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.form-actions .btn-cancel {
+    padding: 10px 24px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-actions .btn-cancel:hover {
+    background: #ddd;
+}
+
+.error {
+    background: #fde8e8;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}

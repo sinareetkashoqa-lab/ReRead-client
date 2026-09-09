@@ -1,0 +1,26 @@
+.navbar-brand {
+    font-weight: bold;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand:hover {
+    color: white;
+}
+
+.nav-link {
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+    color: #F0D9A0 !important;
+}
+
+.btn-warning {
+    transition: all 0.2s ease;
+}
+
+.btn-warning:hover {
+    background: #f9a825;
+}

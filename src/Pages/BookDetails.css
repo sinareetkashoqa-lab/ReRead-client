@@ -1,0 +1,227 @@
+.book-details {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.book-details .breadcrumb {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.book-details .breadcrumb a {
+    color: #2E7D32;
+}
+
+.book-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+}
+
+.book-layout .cover img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.book-layout .info .genre-badge {
+    display: inline-block;
+    background: #f0f2f0;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.book-layout .info h1 {
+    font-size: 32px;
+    margin-bottom: 2px;
+}
+
+.book-layout .info .author {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.book-layout .info .metadata {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.book-layout .info .condition {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #2E7D32;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.book-layout .info .availability {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.book-layout .info .availability.available {
+    background: #e8f5e9;
+    color: #2E7D32;
+}
+
+.book-layout .info .availability.borrowed {
+    background: #fce4ec;
+    color: #c62828;
+}
+
+.book-layout .info .location {
+    color: #666;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.book-layout .info .owner {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.book-layout .info .description {
+    color: #444;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.book-layout .info .owner-notes {
+    background: #f5f7f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2E7D32;
+    margin-bottom: 20px;
+}
+
+.book-layout .info .owner-notes strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.book-layout .info .btn-request {
+    padding: 12px 30px;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.book-layout .info .btn-request:hover {
+    background: #1e5a20;
+}
+
+.book-layout .info .btn-request:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.reviews-section {
+    margin-top: 40px;
+}
+
+.reviews-section h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.review-card {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(46, 125, 50, 0.08);
+    margin-bottom: 10px;
+}
+
+.review-card .reviewer {
+    font-weight: 600;
+}
+
+.review-card .review-date {
+    color: #999;
+    font-size: 12px;
+}
+
+.review-card .review-comment {
+    margin-top: 5px;
+    color: #444;
+}
+
+.review-form {
+    margin-top: 20px;
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 16px;
+}
+
+.review-form .btn-submit {
+    padding: 8px 20px;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+.review-form .btn-submit:hover {
+    background: #1e5a20;
+}
+
+.review-form .btn-cancel {
+    padding: 8px 20px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.review-form .btn-cancel:hover {
+    background: #ddd;
+}
+
+.no-reviews {
+    color: #666;
+    padding: 20px 0;
+}
+
+.btn-write-review {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid #2E7D32;
+    color: #2E7D32;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+.btn-write-review:hover {
+    background: #2E7D32;
+    color: white;
+}

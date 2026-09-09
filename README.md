@@ -1,16 +1,58 @@
-# React + Vite
+# 📚 ReRead - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** for ReRead, a community library web application built with **React + Vite**.
 
-Currently, two official plugins are available:
+## 🎯 Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+ReRead lets neighbors share books with each other. The app supports two types of users:
 
-## React Compiler
+- 👤 **Regular users**: browse the community's books, lend their own books, and request to borrow from others
+- 🛠️ **Admins**: manage users, books, and borrow requests across the whole platform
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Login and signup are included with a basic role-based flow (user/admin). Data is persisted in the backend via PostgreSQL.
 
-## Expanding the ESLint configuration
+## 🧑‍💻 User Requirements
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Register or Login** with an email and password
+2. **Regular users** can:
+   - Browse available books shared by the community
+   - Add their own books to lend out, and edit or delete their listings
+   - Request to borrow a book from another user
+   - Approve, decline, or mark as returned any requests they receive as an owner
+   - Track requests they've sent, received, and completed
+   - Write and view reviews for books they've borrowed
+   - View and update their profile, or delete their account
+3. **Admin users** can:
+   - View and manage all registered users (suspend or delete)
+   - View and remove any book in the system
+   - View and remove any borrow request in the system
+4. The app remembers login sessions using `localStorage`
+
+## 🛠️ Technologies
+
+- React 19
+- Vite
+- React Router DOM
+- Bootstrap (used for the Navbar component only)
+- Fetch API
+- LocalStorage (for session persistence)
+
+## 🚀 Getting Started
+
+```bash
+git clone <repo-url>
+cd reread-client
+npm install
+```
+
+```md
+##Create a `.env` file in the project root
+
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+Then start the app:
+
+```bash
+npm run dev
+```

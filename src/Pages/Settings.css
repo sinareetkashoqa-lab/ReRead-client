@@ -1,0 +1,103 @@
+.settings-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.settings-page h1 {
+    font-size: 28px;
+}
+
+.settings-page .subtitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.settings-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.10);
+}
+
+.settings-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.settings-card p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.settings-card .warning {
+    background: #fff3e0;
+    color: #e65100;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f57c00;
+    margin-bottom: 20px;
+}
+
+.settings-card .btn-delete {
+    padding: 10px 24px;
+    background: #c62828;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-card .btn-delete:hover {
+    background: #8e1a1a;
+}
+
+.settings-card .confirm-box {
+    background: #fce4ec;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #c62828;
+}
+
+.settings-card .confirm-box p {
+    color: #c62828;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.settings-card .confirm-box .btn-confirm {
+    padding: 10px 24px;
+    background: #c62828;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+}
+
+.settings-card .confirm-box .btn-confirm:hover {
+    background: #8e1a1a;
+}
+
+.settings-card .confirm-box .btn-cancel {
+    padding: 10px 24px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-card .confirm-box .btn-cancel:hover {
+    background: #ddd;
+}
+
+.settings-card .error {
+    background: #fde8e8;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}

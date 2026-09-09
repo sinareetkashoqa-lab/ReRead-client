@@ -1,0 +1,129 @@
+.register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.register-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(46, 125, 50, 0.12);
+    max-width: 500px;
+    width: 100%;
+}
+
+.register-card h2 {
+    text-align: center;
+    font-size: 28px;
+}
+
+.register-card .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.register-card .form-group {
+    margin-bottom: 15px;
+}
+
+.register-card .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.register-card .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.register-card .form-group .hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 3px;
+}
+
+.register-card .checkbox-group {
+    margin: 15px 0;
+}
+
+.register-card .checkbox-group label {
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.register-card .btn-register {
+    width: 100%;
+    padding: 12px;
+    background: #2E7D32;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.register-card .btn-register:hover {
+    background: #1e5a20;
+}
+
+.register-card .divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #999;
+    position: relative;
+}
+
+.register-card .divider::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: #ddd;
+}
+
+.register-card .divider span {
+    background: white;
+    padding: 0 15px;
+    position: relative;
+}
+
+.register-card .login-link {
+    text-align: center;
+}
+
+.register-card .login-link a {
+    color: #2E7D32;
+}
+
+.register-card .back-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register-card .back-link a {
+    color: #999;
+    font-size: 14px;
+}
+
+.register-card .back-link a:hover {
+    color: #2E7D32;
+}
+
+.register-card .error {
+    background: #fde8e8;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
